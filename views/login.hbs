@@ -1,19 +1,26 @@
 <div>
-
-    <h1>Login</h1>
+    <div class="sign-in">
+    <h1 class="login-title">Sign in to your account</h1>
 
     <ul>
         {{#each data}}
         <li>{{@key}} : {{this}}</li>
         {{/each}}
     </ul>
-
+    <div class="user-input">
     <form action='/login' method="POST">
-        <label for="email">Email: </label>
-        <input type="email" name="email">
-        <label for="password">Password: </label>
-        <input type="password" name="password">
-        <br>
-        <input type="submit" value="send">
+        <label class="email" for="email" class="email-address">Email address </label>
+    
+        <input type="email" name="email" placeholder="Enter your email address...">
+
+        <label class="password" for="password">Password </label>
+        
+        <input type="password" name="password" placeholder="Enter your password...">
+        
+        <input class="submitButton" type="submit" value="Sign in">
+    
     </form>
+    </div>
+    </div>
+
 </div>

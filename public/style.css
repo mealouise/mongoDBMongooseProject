@@ -1,0 +1,85 @@
+body {
+    background-color: #0d4c91;
+
+}
+
+.header {
+    color:white;
+    font-family: inherit;
+}
+.login-title {
+    color:white;
+    font-family: arial;
+    font-weight: lighter;
+    font-size: 40px;
+}
+
+.submitButton {
+    background-color: #2d9215;
+    border-color: #2d9215;
+    box-shadow: grey;
+    color: white;
+    margin-top:25px;
+    width: 404px;
+    border-radius: 5px;
+    font-weight:lighter;
+}
+
+.sign-in {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-input {
+    width: 406px;
+    height: 225px;
+    background-color: white;
+    border-radius: 5px;
+    padding:20px;
+    /* flex:1; */
+}
+
+.email {
+    font-size: 20px;
+    font-family: arial;
+    margin-bottom: 10px;
+}
+
+.password {
+    font-size: 20px;
+    font-family: arial;
+}
+
+input {
+    width:380px;
+    background-color:#f0f0f0; 
+    border-radius: 3px;
+    border-color: #d7d7d7;
+    padding:10px;
+    font-size: 20px;
+    margin-top:10px;
+}
+
+
+nav li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li {
+    list-style: none;
+    font-family: arial;
+    display: flex;
+    flex-direction: row;
+    display: inline-block;
+    font-size: 20px;
+}
+
+.navbar {
+    display: flex;
+}
+
+.home {
+    margin-right: 20px;
+}

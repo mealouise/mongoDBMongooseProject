@@ -14,10 +14,10 @@ mongoose.connect(`mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@
 });
 
 const user = new UserSchema({
-    name:'winston',
+    name: "winston",
     email: 'winston@mail.com',
-    password: 'password444'
-})
+    password: "password444"
+});
 
 UserSchema.find({}, (err,docs) => {
     console.log(docs);
@@ -39,9 +39,6 @@ app.get('/', (req,res) => { //
     res.render('index');
 });
 
-app.get('/signup', (req,res) => {
-    res.render('signup');
-});
 
 app.get('/login', (req,res) => {
     res.render('login');
@@ -49,20 +46,12 @@ app.get('/login', (req,res) => {
 
 app.post('/', async(req,res) => {
     let name = req.body.name;
-    let email = req.body.email;
-    let password = req.body.password;
-
-    res.render('index', {data: {name, email, password}});
-});
-
-app.post('/signup', async(req, res) => {
-
-    res.render('signup', )
+    let user = new UserSchema({name:name});
 });
 
 app.post('/login', async(req, res) => {
 
-    res.render('login')
+    res.render('index')
 })
 
 
