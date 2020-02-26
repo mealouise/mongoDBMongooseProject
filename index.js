@@ -1,12 +1,14 @@
 const hbs = require('express-handlebars'); //
-const path = require('path'); //
-const express = require('express'); //
-const bodyParser = require('body-parser'); //
+const path = require('path'); // gets relative path of where file is on computer
+const express = require('express'); // server
+const bodyParser = require('body-parser'); //postin
 const mongoose = require('mongoose'); //
 const UserSchema = require('./models/users');
+//const getUsers = require('./lib/getUsers');
 
-const getUsers = require('./lib/getUsers');
-
+/**
+ * Basic server setup, same for all website, you need to know what it is but dont need to remember it
+ */
 require('dotenv').config(); //
 const app = express(); //
 
@@ -14,16 +16,6 @@ mongoose.connect(`mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@
     useNewUrlParser: true,
     useUnifiedTopolgy: true
 });
-
-const user = new UserSchema({
-    email: 'name@mail.com',
-    password: "password"
-});
-
-UserSchema.find({}, (err,docs) => {
-    console.log(docs);
-})
-
 
 app.use(express.static(path.join(__dirname, 'public'))); //
 app.use(bodyParser.urlencoded({extended: false})); //
@@ -35,6 +27,11 @@ app.engine('.hbs', hbs ({ //
 }));
 
 app.set('view engine', '.hbs'); //
+
+/**
+ * Website endpoints below here
+ */
+
 
 app.get('/', (req,res) => { //
     res.render('index');
@@ -48,58 +45,106 @@ app.get('/signup', (req,res) => {
     res.render('signup');
 })
 
-app.post('/login', async(req,res) => {
-    let email = req.body.email;
-    let password = req.body.password;
+// app.post('/login', async(req,res) => {
 
+//     let email = req.body.email;
+//     let password = req.body.password;
+//     console.log('login body', req.body);
+
+//     // if (docs.length > 0) {
+//     //     res.render('index',{err: "a user with this email already exists"} )
+//     //     return; // might need to render the sign up page
+//     // }
     
-   
-    // if (docs.length > 0) {
-    //     res.render('index',{err: "a user with this email already exists"} )
-    //     return; // might need to render the sign up page
-    // }
-    
-    // if (docs1.length > 0) {
-    //     res.render('index', {err: 'this username already exists'} )
-    //     return;
-    // }
-    // console.log(docs);
+//     // if (docs1.length > 0) {
+//     //     res.render('index', {err: 'this username already exists'} )
+//     //     return;
+//     // }
+//     // console.log(docs);
 
-    // const user = new UserSchema({
-    //     email: email,
-    //     password: password
-    // });
-    // user.save();
+//     // const user = new UserSchema({
+//     //     email: email,
+//     //     password: password
+//     // });
+//     // user.save();
 
-    res.render('index');
+//     res.render('index');
+// });
+
+
+
+// app.post('/signup', async(req, res) => {
+
+//     let username = req.body.username;
+//     let email = req.body.email;
+//     let password = req.body.password;
+
+//     let docs = await getUsers.email(email);
+//     let docs1 = await getUsers.username(username);
+//     if (docs.length > 0) {
+//         res.render('signup',{err: "a user with this email already exists"} )
+//         return; // might need to render the sign up page
+//     }
+
+//     if (docs1.length > 0) {
+//         res.render('signup',{err: "this username already exists"} )
+//         return; // might need to render the sign up page
+//     }
+//     const user = new UserSchema({
+//         name: username,
+//         email: email,
+//         password: password
+//     });
+//     user.save();
+
+//     res.render('index')
+// });
+app.post('/login', (req,res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    UserSchema.findOne({email:email, password:password}, (err, userRecord) => {
+        if (err) return res.render('login', { err: err});
+        if (userRecord) {
+            console.log('userRecord', userRecord);
+            return res.render('index', {username:userRecord.name});
+        } else {
+            return res.render('login', {err: "login details incorrect"} )
+        }
+    });
 });
 
-app.post('/signup', async(req, res) => {
-    let username = req.body.username;
-    let email = req.body.email;
-    let password = req.body.password;
+app.post('/signup', (req, res) => {
+
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    UserSchema.findOne({email: email}, (err,record) => {
+
+        if (err) return res.render('signup', { err: err});
+
+        if (record) {
+            return res.render('signup',{err: "a user with this email already exists"} )
+        }
     
-    let docs = await getUsers.email(email);
-    let docs1 = await getUsers.username(username);
-    if (docs.length > 0) {
-        res.render('signup',{err: "a user with this email already exists"} )
-        return; // might need to render the sign up page
-    }
-
-    if (docs1.length > 0) {
-        res.render('signup',{err: "this username already exists"} )
-        return; // might need to render the sign up page
-    }
-    const user = new UserSchema({
-        name: username,
-        email: email,
-        password: password
+        UserSchema.create({
+            name: username,
+            email: email,
+            password: password
+        }, (err, userRecord) => {
+            if (err) return res.render('signup', { err: err});
+            console.log('created uer', userRecord);
+            res.render('index', {username:userRecord.name})
+        });
     });
-    user.save();
+});
 
-    res.render('index')
-})
 
+
+/**
+ * This starts the server
+ */
 
 app.listen(3000, () => { //
     console.log('server is listening on port 3000');
