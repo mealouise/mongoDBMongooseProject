@@ -83,3 +83,12 @@ nav ul li {
 .home {
     margin-right: 20px;
 }
+
+.signup-input {
+    width: 406px;
+    height: 320px;
+    background-color: white;
+    border-radius: 5px;
+    padding:20px;
+    /* flex:1; */
+}

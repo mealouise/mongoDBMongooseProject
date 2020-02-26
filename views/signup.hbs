@@ -1,0 +1,31 @@
+<div>
+    <div class="sign-in">
+    <h1 class="login-title">Sign up</h1>
+
+    <ul>
+        {{#each data}}
+        <li>{{@key}} : {{this}}</li>
+        {{/each}}
+    </ul>
+    <div class="signup-input">
+    <form action='/signup' method="POST">
+        <label class="username" for="username">Username</label>
+
+        <input type="text" name="username" placeholder="Enter your username">
+
+        <label class="email" for="email" class="email-address">Email address </label>
+    
+        <input type="email" name="email" placeholder="Enter your email address...">
+
+        <label class="password" for="password">Password </label>
+        
+        <input type="password" name="password" placeholder="Enter your password...">
+        
+        <input class="submitButton" type="submit" value="Sign in">
+    
+    </form>
+    <h3>{{err}}</h3>
+    </div>
+    </div>
+
+</div>

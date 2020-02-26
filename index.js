@@ -5,6 +5,8 @@ const bodyParser = require('body-parser'); //
 const mongoose = require('mongoose'); //
 const UserSchema = require('./models/users');
 
+const getUsers = require('./lib/getUsers');
+
 require('dotenv').config(); //
 const app = express(); //
 
@@ -14,9 +16,8 @@ mongoose.connect(`mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@
 });
 
 const user = new UserSchema({
-    name: "winston",
-    email: 'winston@mail.com',
-    password: "password444"
+    email: 'name@mail.com',
+    password: "password"
 });
 
 UserSchema.find({}, (err,docs) => {
@@ -39,17 +40,62 @@ app.get('/', (req,res) => { //
     res.render('index');
 });
 
-
 app.get('/login', (req,res) => {
     res.render('login');
 });
 
-app.post('/', async(req,res) => {
-    let name = req.body.name;
-    let user = new UserSchema({name:name});
+app.get('/signup', (req,res) => {
+    res.render('signup');
+})
+
+app.post('/login', async(req,res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+
+    
+   
+    // if (docs.length > 0) {
+    //     res.render('index',{err: "a user with this email already exists"} )
+    //     return; // might need to render the sign up page
+    // }
+    
+    // if (docs1.length > 0) {
+    //     res.render('index', {err: 'this username already exists'} )
+    //     return;
+    // }
+    // console.log(docs);
+
+    // const user = new UserSchema({
+    //     email: email,
+    //     password: password
+    // });
+    // user.save();
+
+    res.render('index');
 });
 
-app.post('/login', async(req, res) => {
+app.post('/signup', async(req, res) => {
+    let username = req.body.username;
+    let email = req.body.email;
+    let password = req.body.password;
+    
+    let docs = await getUsers.email(email);
+    let docs1 = await getUsers.username(username);
+    if (docs.length > 0) {
+        res.render('signup',{err: "a user with this email already exists"} )
+        return; // might need to render the sign up page
+    }
+
+    if (docs1.length > 0) {
+        res.render('signup',{err: "this username already exists"} )
+        return; // might need to render the sign up page
+    }
+    const user = new UserSchema({
+        name: username,
+        email: email,
+        password: password
+    });
+    user.save();
 
     res.render('index')
 })
